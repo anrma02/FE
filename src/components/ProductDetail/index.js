@@ -8,6 +8,7 @@ import * as ProductService from '~/service/ProductService';
 import chunk from 'lodash/chunk';
 import { InputNumber } from 'antd';
 import Button from '../Button';
+import Button1 from '@mui/material/Button';
 import { useQuery } from 'react-query';
 import Loading from '../LoadingComponent';
 import { useState } from 'react';
@@ -22,10 +23,12 @@ import ModalComponent from '~/pages/Admin/ComponentAdmin/ModalComponent';
 import { useEffect } from 'react';
 import { useMemo } from 'react';
 import { WrapperRate, WrapperRate1 } from './style';
+import WrapperBook from './wrappBook';
 
 const cx = classNames.bind(styles);
 function ProductDetail({ idProduct }) {
     const [numProduct, setNumProduct] = useState(1);
+    const [open, setOpen] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -44,7 +47,14 @@ function ProductDetail({ idProduct }) {
             }
         }
     };
+    const handleClickOpen = () => {
+        setOpen(true);
+        console.log(111111111);
+    };
 
+    const handleClose = () => {
+        setOpen(false);
+    };
     // const { isLoading, isSuccess, isError, data } = mutationAddOrder;
     const handleAddProductCartBuy = () => {
         // {
@@ -109,8 +119,6 @@ function ProductDetail({ idProduct }) {
         const id = context?.queryKey && context?.queryKey[1];
         if (id) {
             const res = await ProductService.getDetailProduct(id);
-
-            console.log('🚀 ~ fetchGetDetailsProduct ~ res:', res.story);
 
             return res.story;
         }
@@ -226,7 +234,6 @@ function ProductDetail({ idProduct }) {
                                 </Image.PreviewGroup>
                             </Row>
                         </div>
-
                         <div className={cx('product-info')}>
                             <span className={cx('name-product')}>{productDetails?.name}</span>
                             <div className={cx('product-right')}>
@@ -260,11 +267,10 @@ function ProductDetail({ idProduct }) {
                                 <div className={cx('time-delivery')}> Thời gian giao hàng</div>
                                 <div className={cx('delivery-info')}>
                                     <div className={cx('place-delivery')}>
-                                        Giao hàng đến: <span className={cx('place-delivery-text')}> Từ sơn - Bắc Ninh</span>
-                                        <span className={cx('place-delivery-change')}> Thay đổi</span>
+                                        Giao hàng đến: &nbsp;<span className={cx('place-delivery-text')}> Từ sơn - Bắc Ninh</span>
                                     </div>
                                     <div className={cx('expected-delivery')}>
-                                        Dự kiến giao:<span className={cx('place-delivery-text')}> Thứ 2 - 30/7</span>
+                                        Thời gian giao hàng: &nbsp;<span className={cx('place-delivery-text')}> Từ thứ 2 -> thứ 6</span>
                                     </div>
                                 </div>
                             </div>
@@ -276,8 +282,12 @@ function ProductDetail({ idProduct }) {
                                     <AiOutlinePlus className={cx('btn-more')} onClick={() => handleChangeCount('increase')} />
                                 </div>
                             </div>
+                            <div className={cx('custom-container')} onClick={handleClickOpen}>
+                                <Button1 sx={{ fontSize: '12px', color: '#fff', fontWeight: 'bold' }}>Xem truyện</Button1>
+                            </div>
                         </div>
                     </div>
+
                     <div className={cx('btn-buy')}>
                         <Button className={cx('btn-buy-cart')} register leftIcon={<AiOutlineShoppingCart className={cx('btn-icon-cart')} />} onClick={handleAddProductCart}>
                             Thêm vào giỏ hàng
@@ -288,8 +298,22 @@ function ProductDetail({ idProduct }) {
                     </div>
                 </div>
 
-                <div className={cx('prd-list')}>
-                    <IntroduceProduct />
+                <div className={cx('aa')}>
+                    <div className={cx('description')}>
+                        <h3>Mô tả nội dung:</h3>
+                        <p className={cx(`${cx('description-text')} ${loadMore ? cx('description-less') : ''}`)}>{productDetails?.content}</p>
+                    </div>
+                    <div className={cx('more-des-op')}>
+                        {!loadMore ? (
+                            <Button register className={cx('more-des')} onClick={() => setLoadMore(true)}>
+                                Xem thêm
+                            </Button>
+                        ) : (
+                            <Button register className={cx('more-des')} onClick={() => setLoadMore(false)}>
+                                Rút ngọn
+                            </Button>
+                        )}
+                    </div>
                 </div>
 
                 <div className={cx('product-information')}>
@@ -334,22 +358,7 @@ function ProductDetail({ idProduct }) {
                             </p>
                             <p className={cx('red')}>Chính sách khuyến mãi trên Fahasa.com không áp dụng cho Hệ thống Nhà sách Fahasa trên toàn quốc</p>
                         </div>
-                        <div className={cx('description')}>
-                            <h3>Mô tả nội dung:</h3>
-                            <p className={cx(`${cx('description-text')} ${loadMore ? cx('description-less') : ''}`)}>{productDetails?.description}</p>
-                        </div>
-                        <div className={cx('more-des-op')}>
-                            {!loadMore ? (
-                                <Button register className={cx('more-des')} onClick={() => setLoadMore(true)}>
-                                    Xem thêm
-                                </Button>
-                            ) : (
-                                <Button register className={cx('more-des')} onClick={() => setLoadMore(false)}>
-                                    Rút ngọn
-                                </Button>
-                            )}
-                        </div>
-                    </div>
+                    </div>{' '}
                 </div>
 
                 <div className={cx('product-review')}>
@@ -424,6 +433,7 @@ function ProductDetail({ idProduct }) {
                     </Button>
                 </div>
             </ModalComponent>
+            {open && <WrapperBook open={open} handleClose={handleClose} data={productDetails} />}
         </Loading>
     );
 }

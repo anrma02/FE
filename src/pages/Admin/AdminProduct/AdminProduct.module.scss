@@ -48,6 +48,12 @@
     border: 1px solid rgba(0, 0, 0, 0.3);
     flex: 3;
 }
+.form-input1 {
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    flex: 3;
+}
+
 .form-label {
     margin-right: 10px;
     flex: 1;
@@ -70,6 +76,16 @@
     outline: none;
     border-radius: 10px;
 }
+
+.form-control1 {
+    height: 100%;
+    width: 100%;
+    padding: 0 10px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+}
+
 .btn-register {
     margin: 10px auto;
 }

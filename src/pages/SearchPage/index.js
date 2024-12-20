@@ -27,8 +27,13 @@ function SearchPage() {
         }
     };
     const { data: products, isLoading } = useQuery(['products'], fetchProductAll, { retry: 3, retryDelay: 1000 });
+
     const searchProduct = useSelector((state) => state?.product?.search);
+
     const [stateProduct, setStateProduct] = useState([]);
+
+    console.log('🚀 ~ SearchPage ~ stateProduct:', stateProduct);
+
     const searchDebounce = useDebounce(searchProduct, 500);
     useEffect(() => {
         if (!searchProduct) {
@@ -40,8 +45,8 @@ function SearchPage() {
     }, [searchProduct, searchDebounce]);
 
     useEffect(() => {
-        if (products?.data?.length > 0) {
-            setStateProduct(products?.data);
+        if (products?.stories) {
+            setStateProduct(products?.stories);
         }
     }, [products]);
 
@@ -49,22 +54,22 @@ function SearchPage() {
         const value = e.target.value;
         let arr;
         if (value === '0-150.000đ') {
-            arr = products?.data.filter((item) => {
+            arr = products?.stories.filter((item) => {
                 return Math.trunc(item.price - (item.price * item.discount) / 100) <= 150000;
             });
             setStateProduct(arr);
         } else if (value === '150.000đ-300.000đ') {
-            arr = products?.data.filter((item) => {
+            arr = products?.stories.filter((item) => {
                 return Math.trunc(item.price - (item.price * item.discount) / 100) > 150000 && Math.trunc(item.price - (item.price * item.discount) / 100) < 300000;
             });
             setStateProduct(arr);
         } else if (value === '300.000đ-500.000đ') {
-            arr = products?.data.filter((item) => {
+            arr = products?.stories.filter((item) => {
                 return Math.trunc(item.price - (item.price * item.discount) / 100) > 300000 && Math.trunc(item.price - (item.price * item.discount) / 100) < 500000;
             });
             setStateProduct(arr);
         } else if (value === '500.000đ') {
-            arr = products?.data.filter((item) => {
+            arr = products?.stories.filter((item) => {
                 return Math.trunc(item.price - (item.price * item.discount) / 100) >= 500000;
             });
             setStateProduct(arr);

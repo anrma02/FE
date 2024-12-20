@@ -59,7 +59,8 @@ function AdminProduct() {
         });
         return res;
     });
-    const { data, isSuccess, isError } = mutation;
+    const { data, isLoading: isLoadingCreate, isSuccess, isError } = mutation;
+
     //
 
     useEffect(() => {
@@ -164,8 +165,6 @@ function AdminProduct() {
     const [rowSelected, setRowSelected] = useState('');
     const user = useSelector((state) => state?.user);
     const [stateProductDetail, setStateProductDetail] = useState(initial());
-
-    console.log('🚀 ~ AdminProduct ~ stateProductDetail:', stateProductDetail);
 
     const handleOnChangeDetail = (e) => {
         setStateProductDetail({
@@ -507,183 +506,185 @@ function AdminProduct() {
                 />
             </div>
             <Modal title="" open={isModalOpen} onCancel={handleCancel} footer={null} width="80%">
-                <form method="post" action="">
-                    <div className={cx('form-group')}>
-                        <label htmlFor="name" className={cx('form-label')}>
-                            Tên truyện
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.name}
-                                onChange={handleOnChange}
-                                type="text"
-                                placeholder="Nhập tên truyện"
-                                className={cx('form-control')}
-                                id="name"
-                                name="name"
-                            />
+                <Loading isLoading={isLoadingCreate}>
+                    <form method="post" action="">
+                        <div className={cx('form-group')}>
+                            <label htmlFor="name" className={cx('form-label')}>
+                                Tên truyện
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input
+                                    value={stateProduct.name}
+                                    onChange={handleOnChange}
+                                    type="text"
+                                    placeholder="Nhập tên truyện"
+                                    className={cx('form-control')}
+                                    id="name"
+                                    name="name"
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className={cx('form-group')}>
-                        <label htmlFor="type" className={cx('form-label')}>
-                            Thể loại
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.type}
-                                onChange={handleOnChange}
-                                type="text"
-                                placeholder="Nhập thể loại"
-                                className={cx('form-control')}
-                                id="type"
-                                name="type"
-                            />
+                        <div className={cx('form-group')}>
+                            <label htmlFor="type" className={cx('form-label')}>
+                                Thể loại
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input
+                                    value={stateProduct.type}
+                                    onChange={handleOnChange}
+                                    type="text"
+                                    placeholder="Nhập thể loại"
+                                    className={cx('form-control')}
+                                    id="type"
+                                    name="type"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={cx('form-group')}>
-                        <label htmlFor="author" className={cx('form-label')}>
-                            Tác giả
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.author}
-                                onChange={handleOnChange}
-                                type="text"
-                                placeholder="Nhập tác giả"
-                                className={cx('form-control')}
-                                id="author"
-                                name="author"
-                            />
+                        <div className={cx('form-group')}>
+                            <label htmlFor="author" className={cx('form-label')}>
+                                Tác giả
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input
+                                    value={stateProduct.author}
+                                    onChange={handleOnChange}
+                                    type="text"
+                                    placeholder="Nhập tác giả"
+                                    className={cx('form-control')}
+                                    id="author"
+                                    name="author"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={cx('form-group')}>
-                        <label htmlFor="content" className={cx('form-label')}>
-                            Nội dung
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.content}
-                                onChange={handleOnChange}
-                                name="content"
-                                type="text"
-                                placeholder="Nhập nội dung"
-                                className={cx('form-control')}
-                                id="content"
-                            />
+                        <div className={cx('form-group')}>
+                            <label htmlFor="age" className={cx('form-label')}>
+                                Tuổi
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input value={stateProduct.age} onChange={handleOnChange} name="age" type="text" placeholder="Nhập tuổi" className={cx('form-control')} id="age" />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={cx('form-group')}>
-                        <label htmlFor="age" className={cx('form-label')}>
-                            Tuổi
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input value={stateProduct.age} onChange={handleOnChange} name="age" type="text" placeholder="Nhập tuổi" className={cx('form-control')} id="age" />
+                        <div className={cx('form-group')}>
+                            <label htmlFor="sold" className={cx('form-label')}>
+                                Đã bán
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input
+                                    value={stateProduct.sold}
+                                    onChange={handleOnChange}
+                                    name="sold"
+                                    type="number"
+                                    placeholder="Nhập đã bán"
+                                    className={cx('form-control')}
+                                    id="sold"
+                                />
+                            </div>
                         </div>
-                    </div>
+                        <div className={cx('form-group')}>
+                            <label htmlFor="price" className={cx('form-label')}>
+                                Giá bán
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input
+                                    value={stateProduct.price}
+                                    onChange={handleOnChange}
+                                    name="price"
+                                    type="number"
+                                    placeholder="Nhập giá"
+                                    className={cx('form-control')}
+                                    id="price"
+                                />
+                            </div>
+                        </div>
+                        <div className={cx('form-group')}>
+                            <label htmlFor="pricesale" className={cx('form-label')}>
+                                Giá giảm
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input
+                                    value={stateProduct.pricesale}
+                                    onChange={handleOnChange}
+                                    name="pricesale"
+                                    type="number"
+                                    placeholder="Nhập giá giảm"
+                                    className={cx('form-control')}
+                                    id="pricesale"
+                                />
+                            </div>
+                        </div>
 
-                    <div className={cx('form-group')}>
-                        <label htmlFor="sold" className={cx('form-label')}>
-                            Đã bán
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.sold}
-                                onChange={handleOnChange}
-                                name="sold"
-                                type="number"
-                                placeholder="Nhập đã bán"
-                                className={cx('form-control')}
-                                id="sold"
-                            />
+                        <div className={cx('form-group')}>
+                            <label htmlFor="rating" className={cx('form-label')}>
+                                Đánh giá
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input
+                                    value={stateProduct.rating}
+                                    onChange={handleOnChange}
+                                    name="rating"
+                                    type="number"
+                                    placeholder="Nhập đánh giá"
+                                    className={cx('form-control')}
+                                    id="rating"
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className={cx('form-group')}>
-                        <label htmlFor="price" className={cx('form-label')}>
-                            Giá bán
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.price}
-                                onChange={handleOnChange}
-                                name="price"
-                                type="number"
-                                placeholder="Nhập giá"
-                                className={cx('form-control')}
-                                id="price"
-                            />
-                        </div>
-                    </div>
-                    <div className={cx('form-group')}>
-                        <label htmlFor="pricesale" className={cx('form-label')}>
-                            Giá giảm
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.pricesale}
-                                onChange={handleOnChange}
-                                name="pricesale"
-                                type="number"
-                                placeholder="Nhập giá giảm"
-                                className={cx('form-control')}
-                                id="pricesale"
-                            />
-                        </div>
-                    </div>
 
-                    <div className={cx('form-group')}>
-                        <label htmlFor="rating" className={cx('form-label')}>
-                            Đánh giá
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.rating}
-                                onChange={handleOnChange}
-                                name="rating"
-                                type="number"
-                                placeholder="Nhập đánh giá"
-                                className={cx('form-control')}
-                                id="rating"
-                            />
+                        <div className={cx('form-group')}>
+                            <label htmlFor="discount" className={cx('form-label')}>
+                                Phần trăm giảm giá
+                            </label>
+                            <div className={cx('form-input')}>
+                                <input
+                                    value={stateProduct.discount}
+                                    onChange={handleOnChange}
+                                    name="discount"
+                                    type="text"
+                                    placeholder="Nhập phần trăm giảm giá"
+                                    className={cx('form-control')}
+                                    id="discount"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={cx('form-group')}>
-                        <label htmlFor="discount" className={cx('form-label')}>
-                            Phần trăm giảm giá
-                        </label>
-                        <div className={cx('form-input')}>
-                            <input
-                                value={stateProduct.discount}
-                                onChange={handleOnChange}
-                                name="discount"
-                                type="text"
-                                placeholder="Nhập phần trăm giảm giá"
-                                className={cx('form-control')}
-                                id="discount"
-                            />
+                        <div className={cx('form-group')}>
+                            <label htmlFor="content" className={cx('form-label')}>
+                                Nội dung
+                            </label>
+                            <div className={cx('form-input1')}>
+                                <textarea
+                                    value={stateProduct.content}
+                                    onChange={handleOnChange}
+                                    name="content"
+                                    placeholder="Nhập nội dung"
+                                    className={cx('form-control1')}
+                                    id="content"
+                                    rows={5}
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className={cx('form-input-avatar')}>
-                        <Upload onChange={handleOnChangeAvatar} className={cx('ant-upload-list-item.ant-upload-list-item-error')} maxCount={1}>
-                            <BTN>Select File</BTN>
-                        </Upload>
-                        {stateProduct?.image && <img src={stateProduct?.image} className={cx('input-avatar')} alt="avatar" />}
-                    </div>
-                </form>
-                <Button login className={cx('btn-save')} onClick={handleOnfinish}>
-                    Lưu
-                </Button>
+                        <div className={cx('form-input-avatar')}>
+                            <Upload onChange={handleOnChangeAvatar} className={cx('ant-upload-list-item.ant-upload-list-item-error')} maxCount={1}>
+                                <BTN>Select File</BTN>
+                            </Upload>
+                            {stateProduct?.image && <img src={stateProduct?.image} className={cx('input-avatar')} alt="avatar" />}
+                        </div>
+                    </form>
+                    <Button login className={cx('btn-save')} onClick={handleOnfinish}>
+                        Lưu
+                    </Button>
+                </Loading>
             </Modal>
             <DrawerComponent isOpen={isOpenDrawer} title="Update Sản Phẩm" onClose={() => setIsOpenDrawer(false)} width="80%">
                 <Loading isLoading={isLoadingUpdated}>
                     <form method="post" action="">
                         <div className={cx('form-group')}>
                             <label htmlFor="name" className={cx('form-label')}>
-                                Name
+                                Tên truyện
                             </label>
                             <div className={cx('form-input')}>
                                 <input
@@ -699,7 +700,7 @@ function AdminProduct() {
                         </div>
                         <div className={cx('form-group')}>
                             <label htmlFor="type" className={cx('form-label')}>
-                                Type
+                                Thể loại
                             </label>
                             <div className={cx('form-input')}>
                                 <input
@@ -715,7 +716,7 @@ function AdminProduct() {
                         </div>
                         <div className={cx('form-group')}>
                             <label htmlFor="author" className={cx('form-label')}>
-                                author
+                                Tác giả
                             </label>
                             <div className={cx('form-input')}>
                                 <input
@@ -731,7 +732,7 @@ function AdminProduct() {
                         </div>
                         <div className={cx('form-group')}>
                             <label htmlFor="sold" className={cx('form-label')}>
-                                sold
+                                Đã bán
                             </label>
                             <div className={cx('form-input')}>
                                 <input
@@ -747,7 +748,7 @@ function AdminProduct() {
                         </div>
                         <div className={cx('form-group')}>
                             <label htmlFor="price" className={cx('form-label')}>
-                                price
+                                Giá
                             </label>
                             <div className={cx('form-input')}>
                                 <input
@@ -763,7 +764,7 @@ function AdminProduct() {
                         </div>
                         <div className={cx('form-group')}>
                             <label htmlFor="pricesale" className={cx('form-label')}>
-                                pricesale
+                                Giá giảm
                             </label>
                             <div className={cx('form-input')}>
                                 <input
@@ -780,7 +781,7 @@ function AdminProduct() {
 
                         <div className={cx('form-group')}>
                             <label htmlFor="rating" className={cx('form-label')}>
-                                rating
+                                Đánh giá
                             </label>
                             <div className={cx('form-input')}>
                                 <input
@@ -832,18 +833,20 @@ function AdminProduct() {
                             <label htmlFor="content" className={cx('form-label')}>
                                 Nội dung
                             </label>
-                            <div className={cx('form-input')}>
-                                <input
+                            <div className={cx('form-input1')}>
+                                <textarea
                                     value={stateProduct.content}
                                     onChange={handleOnChange}
                                     name="content"
                                     type="text"
                                     placeholder="Nhập nội dung"
-                                    className={cx('form-control')}
+                                    className={cx('form-control1')}
                                     id="content"
+                                    rows={5}
                                 />
                             </div>
                         </div>
+
                         <div className={cx('form-input-avatar')}>
                             <Upload onChange={handleOnChangeAvatarDetail} className={cx('ant-upload-list-item.ant-upload-list-item-error')} maxCount={1}>
                                 <BTN>Select File</BTN>
