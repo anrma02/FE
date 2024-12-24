@@ -19,6 +19,8 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const order = useSelector((state) => state.order);
+    const user = useSelector((state) => state.user);
+
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -32,8 +34,7 @@ function Header() {
                     </div>
                 </MenuTippy>
 
-                {/* search */}
-                <InputSearch />
+                 <InputSearch />
                 <div className={cx('action')}>
                     <Bell>
                         <div className={cx('bell')}>
@@ -44,11 +45,20 @@ function Header() {
                         </div>
                     </Bell>
                     <Link to="/cart" className={cx('cart')}>
-                        <Badge count={order?.orderItems.length}>
-                            <button className={cx('btn-cart')}>
-                                <BsCart2 />
-                            </button>
-                        </Badge>
+                        {user?.access_token ? (
+                            <Badge count={order?.orderItems.length}>
+                                <button className={cx('btn-cart')}>
+                                    <BsCart2 />
+                                </button>
+                            </Badge>
+                        ) : (
+                            <Badge>
+                                <button className={cx('btn-cart')}>
+                                    <BsCart2 />
+                                </button>
+                            </Badge>
+                        )}
+
                         <span className={cx('text-cart')}>Giỏ Hàng</span>
                     </Link>
                     <UserTip />

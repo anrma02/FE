@@ -22,19 +22,17 @@ function ProductCard(props) {
         },
     }));
 
-    const { image, name, price, pricesale, rating, sold, discount, description, id, age, content, ...rests } = props;
-
-    console.log('🚀 ~ ProductCard ~ sold:', sold);
+    const { image, name, price, pricesale, rating, sold, discount, description, age, content, ...rests } = props;
 
     const navigate = useNavigate();
     const handleDetailProduct = () => {
-        navigate(`/product/${id}`);
+        navigate(`/product/${props._id}`);
     };
     const priceSale = Math.trunc(price - (price * discount) / 100);
 
     return (
-        <div className={cx('wrapper')} {...rests}>
-            <div className={cx('product-item-img')} onClick={() => handleDetailProduct(id)}>
+        <div className={cx('wrapper')} {...rests} onClick={() => handleDetailProduct()}>
+            <div className={cx('product-item-img')}>
                 <img className={cx('product-img')} src={image} alt={name} />
 
                 {discount !== 0 && <div className={cx('discount')}>{discount}%</div>}

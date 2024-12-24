@@ -5,71 +5,48 @@ import ProductCard from '~/components/ProductCard';
 import * as ProductService from '~/service/ProductService';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import Loading from '~/components/LoadingComponent';
 import NavbarComponent from '~/components/NavbarComponent';
 import useDebounce from '~/hooks/useDebounce';
+import { SearchContext } from '~/context/SearchContext';
 
 const cx = classNames.bind(styles);
 
 function SearchPage() {
-    const [loading, setLoading] = useState(false);
-    const fetchProductAll = async (search) => {
-        setLoading(true);
-        const res = await ProductService.getAllProducts(search);
-        if (search.length > 0) {
-            setStateProduct(res?.data);
-            setLoading(false);
-        } else {
-            setLoading(false);
-            return res;
-        }
-    };
-    const { data: products, isLoading } = useQuery(['products'], fetchProductAll, { retry: 3, retryDelay: 1000 });
+    // const [loading, setLoading] = useState(false);
 
-    const searchProduct = useSelector((state) => state?.product?.search);
+    const { searchResult, setSearchResult } = useContext(SearchContext);
 
     const [stateProduct, setStateProduct] = useState([]);
 
     console.log('🚀 ~ SearchPage ~ stateProduct:', stateProduct);
 
-    const searchDebounce = useDebounce(searchProduct, 500);
     useEffect(() => {
-        if (!searchProduct) {
-            return;
-        } else if (searchDebounce === '') {
-            return;
-        }
-        fetchProductAll(searchProduct);
-    }, [searchProduct, searchDebounce]);
-
-    useEffect(() => {
-        if (products?.stories) {
-            setStateProduct(products?.stories);
-        }
-    }, [products]);
+        setStateProduct(searchResult);
+    }, [searchResult]);
 
     const handleNavbar = (e) => {
         const value = e.target.value;
         let arr;
         if (value === '0-150.000đ') {
-            arr = products?.stories.filter((item) => {
+            arr = searchResult?.filter((item) => {
                 return Math.trunc(item.price - (item.price * item.discount) / 100) <= 150000;
             });
             setStateProduct(arr);
         } else if (value === '150.000đ-300.000đ') {
-            arr = products?.stories.filter((item) => {
+            arr = searchResult?.filter((item) => {
                 return Math.trunc(item.price - (item.price * item.discount) / 100) > 150000 && Math.trunc(item.price - (item.price * item.discount) / 100) < 300000;
             });
             setStateProduct(arr);
         } else if (value === '300.000đ-500.000đ') {
-            arr = products?.stories.filter((item) => {
+            arr = searchResult?.filter((item) => {
                 return Math.trunc(item.price - (item.price * item.discount) / 100) > 300000 && Math.trunc(item.price - (item.price * item.discount) / 100) < 500000;
             });
             setStateProduct(arr);
         } else if (value === '500.000đ') {
-            arr = products?.stories.filter((item) => {
+            arr = searchResult?.filter((item) => {
                 return Math.trunc(item.price - (item.price * item.discount) / 100) >= 500000;
             });
             setStateProduct(arr);
@@ -77,32 +54,18 @@ function SearchPage() {
     };
 
     return (
-        <Loading isLoading={isLoading || loading}>
+        <div>
             <h2 className={cx('wrapper')}>
                 <NavbarComponent className={cx('navbar')} onChange={handleNavbar} />
                 <div className={cx('inner')}>
                     <div className={cx('list-product')}>
                         {stateProduct?.map((product) => {
-                            return (
-                                <ProductCard
-                                    className={cx('search-product')}
-                                    key={product._id}
-                                    image={product.image}
-                                    name={product.name}
-                                    price={product.price}
-                                    rating={product.rating}
-                                    sold={product.sold}
-                                    discount={product.discount}
-                                    chapter={product.chapter}
-                                    countInStock={product.countInStock}
-                                    id={product._id}
-                                />
-                            );
+                            return <ProductCard key={product._id} {...product} />;
                         })}
                     </div>
                 </div>
             </h2>
-        </Loading>
+        </div>
     );
 }
 

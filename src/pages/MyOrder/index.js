@@ -19,6 +19,9 @@ function MyOrder() {
     const navigate = useNavigate();
     const fetchMyOrder = async () => {
         const res = await OrderService.getDetailOrderUser(state?.id, state?.token);
+
+        console.log('🚀 ~ fetchMyOrder ~ res:', res);
+
         return res.data;
     };
     const queryOrder = useQuery(

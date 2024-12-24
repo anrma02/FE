@@ -24,6 +24,7 @@ import { useEffect } from 'react';
 import { useMemo } from 'react';
 import { WrapperRate, WrapperRate1 } from './style';
 import WrapperBook from './wrappBook';
+import { MdDelete } from 'react-icons/md';
 
 const cx = classNames.bind(styles);
 function ProductDetail({ idProduct }) {
@@ -36,6 +37,7 @@ function ProductDetail({ idProduct }) {
         setNumProduct(Number(value));
     };
     const user = useSelector((state) => state.user);
+
     const handleChangeCount = (type) => {
         if (type === 'increase') {
             setNumProduct(numProduct + 1);
@@ -49,7 +51,6 @@ function ProductDetail({ idProduct }) {
     };
     const handleClickOpen = () => {
         setOpen(true);
-        console.log(111111111);
     };
 
     const handleClose = () => {
@@ -57,18 +58,6 @@ function ProductDetail({ idProduct }) {
     };
     // const { isLoading, isSuccess, isError, data } = mutationAddOrder;
     const handleAddProductCartBuy = () => {
-        // {
-        //     name: { type: String, required: true },
-        //     amount: { type: Number, required: true },
-        //     image: { type: String, required: true },
-        //     price: { type: Number, required: true },
-        //     discount: { type: Number },
-        //     product: {
-        //         type: mongoose.Schema.Types.ObjectId,
-        //         ref: 'Product',
-        //         required: true,
-        //     },
-        // },
         dispatch(
             addOrderProduct({
                 orderItem: {
@@ -78,7 +67,7 @@ function ProductDetail({ idProduct }) {
                     discount: productDetails?.discount,
                     price: productDetails?.price,
                     pricesale: productDetails?.pricesale,
-                    product: productDetails?._id,
+                    story: productDetails?._id,
                     countInStock: productDetails?.countInStock,
                 },
             }),
@@ -86,18 +75,11 @@ function ProductDetail({ idProduct }) {
         navigate('/cart');
     };
     const handleAddProductCart = () => {
-        // {
-        //     name: { type: String, required: true },
-        //     amount: { type: Number, required: true },
-        //     image: { type: String, required: true },
-        //     price: { type: Number, required: true },
-        //     discount: { type: Number },
-        //     product: {
-        //         type: mongoose.Schema.Types.ObjectId,
-        //         ref: 'Product',
-        //         required: true,
-        //     },
-        // },
+        if (!user?.access_token) {
+            alert('Vui lòng đăng nhập để tiếp tục mua hàng');
+            navigate('/login');
+            return;
+        }
         dispatch(
             addOrderProduct({
                 orderItem: {
@@ -107,7 +89,7 @@ function ProductDetail({ idProduct }) {
                     discount: productDetails?.discount,
                     price: productDetails?.price,
                     pricesale: productDetails?.pricesale,
-                    product: productDetails?._id,
+                    story: productDetails?._id,
                     countInStock: productDetails?.countInStock,
                 },
             }),
@@ -142,6 +124,12 @@ function ProductDetail({ idProduct }) {
     });
 
     const handleAddComment = () => {
+        if (!user?.access_token) {
+            alert('Vui lòng đăng nhập để bình luận');
+            navigate('/login');
+            return;
+        }
+
         if (user?.access_token && user?.id && user?.name && comment && productDetails?._id) {
             mutationAddComment.mutate(
                 {
@@ -195,6 +183,7 @@ function ProductDetail({ idProduct }) {
     const handleRate = (value) => {
         setRateValue(value);
     };
+    const [reload, setReaload] = useState(0);
 
     const pagination = chunk(dataComment, 7);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -208,6 +197,11 @@ function ProductDetail({ idProduct }) {
     }, [dataComment]);
 
     const [loadMore, setLoadMore] = useState(false);
+
+    const handleDeleteComment = (id) => {
+        CommentService.deleteComment(id, { token: user?.access_token });
+        setReaload(new Date() * 1);
+    };
 
     return (
         <Loading isLoading={isLoading}>
@@ -267,7 +261,7 @@ function ProductDetail({ idProduct }) {
                                 <div className={cx('time-delivery')}> Thời gian giao hàng</div>
                                 <div className={cx('delivery-info')}>
                                     <div className={cx('place-delivery')}>
-                                        Giao hàng đến: &nbsp;<span className={cx('place-delivery-text')}> Từ sơn - Bắc Ninh</span>
+                                        Giao hàng đến: &nbsp;<span className={cx('place-delivery-text')}> {user?.address}</span>
                                     </div>
                                     <div className={cx('expected-delivery')}>
                                         Thời gian giao hàng: &nbsp;<span className={cx('place-delivery-text')}> Từ thứ 2 -> thứ 6</span>
@@ -383,7 +377,7 @@ function ProductDetail({ idProduct }) {
                     <div className={cx('comment')}>
                         {pagination[currentIndex]?.map((item) => {
                             return (
-                                <div key={item?._id}>
+                                <div key={item?._id} style={{ display: 'flex', justifyContent: 'space-between', width: '50%', alignItems: 'center' }}>
                                     <div className={cx('list-comment')}>
                                         <div className={cx('comment-name-date')}>
                                             <div className={cx('comment-name')}>{item?.userName}</div>
@@ -394,6 +388,11 @@ function ProductDetail({ idProduct }) {
                                             <span className={cx('comment-text')}>{item?.comment}</span>
                                         </div>
                                     </div>
+                                    {user?.name && (
+                                        <div className="delete-comment" onClick={() => handleDeleteComment(item?._id)}>
+                                            <MdDelete />
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}

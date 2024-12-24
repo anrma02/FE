@@ -2,12 +2,8 @@ import axios from 'axios';
 import { axiosJWT } from './UserService';
 
 export const getAllProducts = async (search, page, limit) => {
-    let res = {};
-    if (search?.length > 0) {
-        res = await axios.get(`${process.env.REACT_APP_API_URL}/story/stories?search=${search}`);
-    } else {
-        res = await axios.get(`${process.env.REACT_APP_API_URL}/story/stories?limit=${limit}&page=${page}`);
-    }
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/story/stories?limit=${limit}&page=${page}`);
+
     return res.data;
 };
 
@@ -53,5 +49,10 @@ export const deleteManyProduct = async (data, access_token) => {
 
 export const getAllTypeProduct = async () => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all-type`);
+    return res.data;
+};
+
+export const getHotNews = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/story/hotnews`);
     return res.data;
 };

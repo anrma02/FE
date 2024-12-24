@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
-
+import SearchProvider from './context/SearchContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient();
@@ -18,7 +18,9 @@ root.render(
         <GlobalStyles>
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
-                    <App />
+                    <SearchProvider>
+                        <App />
+                    </SearchProvider>
                 </PersistGate>
             </Provider>
         </GlobalStyles>

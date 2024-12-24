@@ -2,7 +2,15 @@
     width: calc(100% / 5 - 6px);
     background-color: #fff;
     margin: 3px;
+    cursor: pointer;
 }
+.wrapper:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    p {
+        color: red;
+    }
+}
+
 .product-item-img {
     width: 100%;
     display: flex;

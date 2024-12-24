@@ -2,12 +2,18 @@
     display: flex;
     margin-top: 10px;
     border-bottom: 1px solid transparent;
+    gap: 20px;
     cursor: pointer;
-    &:hover {
-        border-color: #cec9cc;
-        border-radius: 5px;
-    }
+    padding: 10px 0;
 }
+
+.wrapper:hover {
+    border-color: #cec9cc;
+    border-radius: 5px;
+    box-shadow: #cec9cc 0px 0px 5px;
+    transition: all 0.3s;
+}
+
 .produce {
     width: 60px;
     height: 50px;

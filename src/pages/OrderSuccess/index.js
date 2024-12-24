@@ -9,6 +9,9 @@ const cx = classNames.bind(style);
 function OrderSuccess() {
     const location = useLocation();
     const { state } = location;
+
+    console.log('🚀 ~ OrderSuccess ~ state:', state);
+
     return (
         <Loading isLoading={false}>
             <div className={cx('wrapper')}>
@@ -17,7 +20,6 @@ function OrderSuccess() {
                         <div className={cx('delivery-title')}>Phương Thức giao hàng:</div>
                         <div className={cx('delivery-way')}>{orderContant.delivery[state?.delivery]}</div>
                     </div>
-
                     <div className={cx('method-buy')}>
                         <div className={cx('method-title')}>Phương thức thanh Toán:</div>
                         <div className={cx('method-way')}>

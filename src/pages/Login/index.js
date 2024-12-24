@@ -133,7 +133,7 @@ function Login() {
                         </span>
                     </div>
                 </form>
-                <span onClick={handleNavigateForgot}>Quên mật khẩu</span>
+                {/* <span onClick={handleNavigateForgot}>Quên mật khẩu</span> */}
                 {data?.status === 'ERR' && <span style={{ color: 'red' }}>{data?.message}</span>}
                 <Loading isLoading={isLoading}>
                     <Button login className={cx('btn-login')} onClick={handleSignIn}>

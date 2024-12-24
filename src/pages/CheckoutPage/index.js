@@ -24,6 +24,7 @@ function CheckoutPage() {
     const order = useSelector((state) => state?.order);
     const [delivery, setDelivery] = useState('good');
     const [payment, setPayment] = useState('later_money');
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [form] = Form.useForm();
@@ -132,6 +133,8 @@ function CheckoutPage() {
             });
         } else if (isError && data?.status === 'ERR') {
             messages.error('Sản phẩm bạn mua đã hết hàng');
+        } else {
+            messages.error('Mua hàng thất bại');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSuccess, isError]);

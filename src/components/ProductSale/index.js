@@ -8,24 +8,24 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrNext, GrPrevious } from 'react-icons/gr';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function ProductSale() {
-    const limit = 10;
-    const page = 1;
+    const [data, setData] = useState([]);
 
-    const fetchProductAll = async (context) => {
-        const search = '';
+    const navigator = useNavigate();
 
-        const page = context?.queryKey && context?.queryKey[1];
-        const limit = context?.queryKey && context?.queryKey[2];
+    const fetchProductAll = async () => {
+        const res = await ProductService.getHotNews();
 
-        const res = await ProductService.getAllProducts(search, page, limit);
-        return res;
+        setData(res.stories);
     };
-    const { data: products } = useQuery(['products', page, limit], fetchProductAll, { retry: 3, retryDelay: 1000 });
-
+    useEffect(() => {
+        fetchProductAll();
+    }, []);
     var settings = {
         speed: 100,
         slidesToShow: 5,
@@ -54,32 +54,28 @@ function ProductSale() {
         );
     }
 
+    const handleDetailProduct = (id) => {
+        navigator(`/product/${id}`);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <div className={cx('product-top')}>
                     <div className={cx('title-product')}>
-                        <h3>FLASH SALE</h3>
+                        <h3>Mới nhất</h3>
                     </div>
-                    <div className={cx('list-product')}>
-                        <Slider {...settings}>
-                            {products?.data?.map((product) => {
-                                return (
-                                    <ProductCard
-                                        key={product.id}
-                                        image={product.image}
-                                        name={product.name}
-                                        price={product.price}
-                                        pricesale={product.pricesale}
-                                        sold={product.sold}
-                                        discount={product.discount}
-                                        chapter={product.chapter}
-                                        countInStock={product.countInStock}
-                                        id={product._id}
-                                    />
-                                );
-                            })}
-                        </Slider>
+
+                    <div style={{ display: 'flex', gap: '15px', margin: '0 70px' }}>
+                        {data?.map((product, index) => (
+                            <div onClick={() => handleDetailProduct(product?._id)} key={index} className={cx('product-item')} style={{ position: 'relative' }}>
+                                <div style={{ width: '200px' }}>
+                                    <div className={cx('new-badge')}>New</div>
+                                    <img src={product?.image} alt={product?.name} />
+                                    <p>{product?.name}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

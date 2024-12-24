@@ -1,13 +1,20 @@
 import { axiosJWT } from './UserService';
 
 export const createOrder = async (data, access_token) => {
-    const res = await axiosJWT.post(`${process.env.REACT_APP_API_URL}/order/create/${data.user}`, data, {
-        headers: {
-            token: `Bearer ${access_token}`,
-        },
-    });
-    return res.data;
+    try {
+        const res = await axiosJWT.post(`${process.env.REACT_APP_API_URL}/order/create/${data.user}`, data, {
+            headers: {
+                token: `Bearer ${access_token}`,
+            },
+        });
+        console.log('🚀 ~ createOrder ~ res:', res);
+        return res.data;
+    } catch (error) {
+        console.error('Error creating order:', error.response || error);
+        throw error;
+    }
 };
+
 export const getDetailOrderUser = async (id, access_token) => {
     const res = await axiosJWT.get(`${process.env.REACT_APP_API_URL}/order/get-order-all/${id}`, {
         headers: {

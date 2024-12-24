@@ -350,3 +350,17 @@ img.ant-image-img.img-product {
 .custom-container:hover {
     background-color: #45a049; /* Màu nền khi hover */
 }
+.delete-comment {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+}
+.delete-comment:hover {
+    color: red;
+    background-color: #2489f4;
+    border-radius: 100%;
+}

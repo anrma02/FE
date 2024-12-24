@@ -88,7 +88,8 @@ function Home() {
                 </div>
 
                 <ProductSale />
-                <div className={cx('category')}>
+                {/* <div className={cx('category')}>
+ 
                     {category?.data?.map((item) => {
                         return (
                             <div key={item?._id} className={cx('item-category')}>
@@ -97,7 +98,7 @@ function Home() {
                             </div>
                         );
                     })}
-                </div>
+                </div> */}
                 <div className={cx('product-top')}>
                     <div className={cx('top-sp')}>
                         <h3>XU HƯỚNG MUA SẮM</h3>

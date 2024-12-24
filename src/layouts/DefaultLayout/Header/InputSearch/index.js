@@ -2,39 +2,26 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import SearchResult from '~/layouts/DefaultLayout/Header/SearchResult';
 import Tippy from '@tippyjs/react/headless';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './InputSearch.module.scss';
 import { useDispatch } from 'react-redux';
 import { searchProduct } from '~/redux/slides/ProductSlide';
 import { useNavigate } from 'react-router-dom';
-import useDebounce from '~/hooks/useDebounce';
+import { SearchContext } from '~/context/SearchContext';
 
 const cx = classNames.bind(styles);
 
 function InputSearch() {
+    const { searchValue, setSearchValue, searchResult, setSearchResult, showResult, setShowResult } = useContext(SearchContext);
+
     const navigate = useNavigate();
     const handleNavigateSearch = () => {
         setShowResult(false);
         navigate('/search');
     };
-    const [searchValue, setSearchValue] = useState('');
-    const [searchResult, setSearchResult] = useState([]);
-    const [showResult, setShowResult] = useState(false);
-    const debounced = useDebounce(searchValue, 500);
+
     const dispatch = useDispatch();
-    useEffect(() => {
-        if (!debounced.trim()) {
-            setSearchResult([]);
-            setSearchValue('');
-            return;
-        }
-        fetch(`http://localhost:3003/api/product/getall?filter=name&filter=${debounced}`)
-            .then((res) => res.json())
-            .then((res) => {
-                setSearchResult(res.data);
-            });
-    }, [debounced]);
 
     const handleHideResult = () => {
         setShowResult(false);
@@ -50,14 +37,16 @@ function InputSearch() {
             <Tippy
                 placement="bottom"
                 interactive
-                visible={showResult && searchResult.length > 0}
+                visible={showResult}
                 render={(attrs) => (
                     <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             <h4 className={cx('search-title')}>Sản phẩm liên quan</h4>
-                            {searchResult.map((result) => (
-                                <SearchResult key={result._id} data={result} />
-                            ))}
+                            {searchResult ? (
+                                searchResult?.map((result) => <SearchResult key={result._id} data={result} />)
+                            ) : (
+                                <div style={{ display: 'flex', justifyContent: 'center', margin: '10px 0' }}>Không tìm thấy sản phẩm</div>
+                            )}
                         </PopperWrapper>
                     </div>
                 )}

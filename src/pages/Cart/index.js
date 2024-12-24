@@ -13,7 +13,7 @@ import { convertPrice } from '~/ultil';
 import Button from '~/components/Button';
 import * as messages from '~/components/Message';
 import ModalComponent from '../Admin/ComponentAdmin/ModalComponent';
-import { Form } from 'antd';
+import { Alert, Form } from 'antd';
 import { useMutationHooks } from '~/hooks/useMutationHook';
 import * as UserService from '~/service/UserService';
 import Loading from '~/components/LoadingComponent';
@@ -23,6 +23,7 @@ import StepComponet from '~/components/StepComponent';
 const cx = classNames.bind(styles);
 function Cart() {
     const order = useSelector((state) => state?.order);
+
     const user = useSelector((state) => state.user);
     const location = useLocation();
     const dispatch = useDispatch();
@@ -36,6 +37,13 @@ function Cart() {
         phone: '',
         city: '',
     });
+
+    useEffect(() => {
+        if (!user.access_token) {
+            alert('Vui lòng đăng nhập để tiếp tục mua hàng');
+            navigate('/login');
+        }
+    }, [user, navigate]);
 
     const handleOnChangeDetail = (e) => {
         setStateUserDetail({
@@ -76,6 +84,7 @@ function Cart() {
     const handleCheckAll = (e) => {
         if (e.target.checked) {
             const newListChecked = [];
+
             order?.orderItems?.forEach((item) => {
                 newListChecked.push(item?.product);
             });
@@ -242,6 +251,7 @@ function Cart() {
                                             />
                                         )}
                                     </div>
+
                                     <img src={item?.image} alt="" className={cx('product-img')} onClick={() => handleDetailProduct(item?.product)} />
                                     <div className={cx('product-info')}>
                                         <span className={cx('product-name')}>{item?.name}</span>
