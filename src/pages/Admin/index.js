@@ -21,7 +21,7 @@ function Admin() {
         getItem('Khách hàng', 'user', <UserOutlined />),
         getItem('Sản phẩm', 'product', <AppstoreOutlined />),
         getItem('Đơn hàng', 'order', <BsFillCartCheckFill />),
-        getItem('Category', 'category', <BiFoodMenu />),
+        // getItem('Category', 'category', <BiFoodMenu />),
         getItem('Comment', 'comment', <AiOutlineComment />),
     ];
 
@@ -35,8 +35,8 @@ function Admin() {
                 return <AdminProduct />;
             case 'order':
                 return <AdminOrder />;
-            case 'category':
-                return <AdminCategory />;
+            // case 'category':
+            //     return <AdminCategory />;
             case 'comment':
                 return <AdminComment />;
             default:

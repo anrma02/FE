@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 
 import styles from './SearchPage.module.scss';
-import ProductCard from '~/components/ProductCard';
 import * as ProductService from '~/service/ProductService';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
@@ -11,6 +10,7 @@ import Loading from '~/components/LoadingComponent';
 import NavbarComponent from '~/components/NavbarComponent';
 import useDebounce from '~/hooks/useDebounce';
 import { SearchContext } from '~/context/SearchContext';
+import ProductCard2 from '~/components/ProductCard/ProductCard1';
 
 const cx = classNames.bind(styles);
 
@@ -20,8 +20,6 @@ function SearchPage() {
     const { searchResult, setSearchResult } = useContext(SearchContext);
 
     const [stateProduct, setStateProduct] = useState([]);
-
-    console.log('🚀 ~ SearchPage ~ stateProduct:', stateProduct);
 
     useEffect(() => {
         setStateProduct(searchResult);
@@ -60,7 +58,7 @@ function SearchPage() {
                 <div className={cx('inner')}>
                     <div className={cx('list-product')}>
                         {stateProduct?.map((product) => {
-                            return <ProductCard key={product._id} {...product} />;
+                            return <ProductCard2 key={product._id} {...product} />;
                         })}
                     </div>
                 </div>

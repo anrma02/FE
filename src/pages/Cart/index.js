@@ -23,7 +23,6 @@ import StepComponet from '~/components/StepComponent';
 const cx = classNames.bind(styles);
 function Cart() {
     const order = useSelector((state) => state?.order);
-
     const user = useSelector((state) => state.user);
     const location = useLocation();
     const dispatch = useDispatch();
@@ -66,9 +65,7 @@ function Cart() {
             }
         }
     };
-    const handleDetailProduct = (id) => {
-        navigate(`/product/${id}`);
-    };
+    const handleDetailProduct = (id) => {};
 
     const handleDeleteOrder = (idProduct) => {
         dispatch(removeOrderProduct({ idProduct }));

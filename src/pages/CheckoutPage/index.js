@@ -18,21 +18,22 @@ import * as messages from '~/components/Message';
 import { useNavigate } from 'react-router-dom';
 import * as PaymentService from '~/service/PaymentService';
 import { removeAllOrderProduct } from '~/redux/slides/orderSlide';
-import { PayPalButtons } from '@paypal/react-paypal-js';
+import { PayPalButton } from 'react-paypal-button-v2';
 const cx = classNames.bind(style);
+
 function CheckoutPage() {
     const order = useSelector((state) => state?.order);
+
+    console.log('🚀 ~ CheckoutPage ~ order:', order);
+
     const [delivery, setDelivery] = useState('good');
     const [payment, setPayment] = useState('later_money');
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [form] = Form.useForm();
-
     const user = useSelector((state) => state.user);
-
     const [sdkReady, setSdkReady] = useState(false);
-
     const [stateUserDetail, setStateUserDetail] = useState({
         name: '',
         phone: '',
@@ -95,23 +96,37 @@ function CheckoutPage() {
         const res = OrderService.createOrder({ ...rest }, token);
         return res;
     });
-    const handleAddOrder = () => {
+
+    const handleAddOrder = async () => {
         if (user?.access_token && order?.orderItemSelected && user?.name && user?.address && user?.phone && user?.city && priceMemo && user?.id) {
             mutationAddOrder.mutate({
                 token: user?.access_token,
-                orderItems: order?.orderItemSelected,
-                fullName: user?.name,
-                address: user?.address,
-                phone: user?.phone,
-                city: user?.city,
-                paymentMethod: payment,
-                deliveryMethod: delivery,
-                itemsPrice: priceMemo,
-                shippingPrice: diliveryPriceMemo,
-                totalPrice: totalPriceMemo,
-                user: user?.id,
-                email: user?.email,
+                orderItems: order?.orderItemSelected, // sản phẩm trong giỏ hàng
+                fullName: user?.name, // tên người nhận
+                address: user?.address, // địa chỉ người nhận
+                phone: user?.phone, // số điện thoại người nhận
+                city: user?.city, // thành phố người nhận
+                paymentMethod: payment, // phương thức thanh toán
+                deliveryMethod: delivery, // phương thức giao hàng
+                itemsPrice: priceMemo, // giá trị sản phẩm
+                shippingPrice: diliveryPriceMemo, // phí vận chuyển
+                totalPrice: totalPriceMemo, // tổng giá trị
+                user: user?.id, // id người dùng
+                email: user?.email, // email người dùng
             });
+        }
+        if (payment === 'paypal') {
+            alert('Chức năng đang phát triển');
+
+            const data = await PaymentService.getConfig({
+                amount: totalPriceMemo,
+                email: user?.email,
+                phone: user?.phone,
+                name: user?.name,
+                address: user?.address,
+                city: user?.city,
+            });
+            console.log('🚀 ~ handleAddOrder ~ data', data);
         }
     };
 
@@ -131,10 +146,10 @@ function CheckoutPage() {
                     order: order?.orderItemSelected,
                 },
             });
+
+            navigate('/');
         } else if (isError && data?.status === 'ERR') {
             messages.error('Sản phẩm bạn mua đã hết hàng');
-        } else {
-            messages.error('Mua hàng thất bại');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSuccess, isError]);
@@ -144,19 +159,26 @@ function CheckoutPage() {
     };
 
     const handlePayment = (e) => {
+        console.log('🚀 ~ handlePayment ~ e.target.value:', e.target.value);
         setPayment(e.target.value);
     };
+
     const addPaypalScript = async () => {
         const { data } = await PaymentService.getConfig();
+
+        console.log('🚀 ~ addPaypalScript ~ data:', data);
+
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
         script.async = true;
+
         script.onload = () => {
             setSdkReady(true);
         };
         document.body.appendChild(script);
     };
+
     useEffect(() => {
         if (!window.paypal) {
             addPaypalScript();
@@ -164,6 +186,7 @@ function CheckoutPage() {
             setSdkReady(true);
         }
     }, []);
+
     const onSuccessPaypal = (detail, data) => {
         mutationAddOrder.mutate({
             token: user?.access_token,
@@ -249,13 +272,14 @@ function CheckoutPage() {
                             <div className={cx('into-money')}> {convertPrice(totalPriceMemo)}</div>
                         </div>
                     </div>
+
                     <div className={cx('option')}>
                         <span className={cx('option-back')}>
                             <AiFillBackward className={cx('back-icon')} />
                             Quay về giỏ hàng
                         </span>
                         {payment === 'paypal' && sdkReady ? (
-                            <PayPalButtons
+                            <PayPalButton
                                 amount={totalPriceMemo}
                                 // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
                                 onSuccess={onSuccessPaypal}

@@ -4,7 +4,6 @@ import HTMLFlipBook from 'react-pageflip';
 import { IoMdClose } from 'react-icons/io';
 
 import './style.css';
- 
 
 const WrapperBook = ({ open, handleClose, data }) => {
     const chapters = data?.description || [];
@@ -38,7 +37,7 @@ const WrapperBook = ({ open, handleClose, data }) => {
                         {parsedData?.chapters.map((chapter, index) => (
                             <div key={index} className="page">
                                 <div className="chapter_title">
-                                    <h1>CHƯƠNG {chapter.chapter_number}: &nbsp;</h1>
+                                    <h1>CHƯƠNG {chapter.chapter_number || chapter.chapter}: &nbsp;</h1>
                                     <h1>{chapter.title}</h1>
                                 </div>
                                 <p className="chapter_content">{chapter.content}</p>

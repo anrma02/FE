@@ -27,6 +27,7 @@
         "react-highlight-words": "^0.20.0",
         "react-icons": "^4.9.0",
         "react-pageflip": "^2.0.3",
+        "react-paypal-button-v2": "^2.6.3",
         "react-query": "^3.39.3",
         "react-redux": "^8.1.1",
         "react-responsive-carousel": "^3.2.23",
