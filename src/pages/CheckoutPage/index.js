@@ -24,8 +24,6 @@ const cx = classNames.bind(style);
 function CheckoutPage() {
     const order = useSelector((state) => state?.order);
 
-    console.log('🚀 ~ CheckoutPage ~ order:', order);
-
     const [delivery, setDelivery] = useState('good');
     const [payment, setPayment] = useState('later_money');
 
@@ -126,7 +124,6 @@ function CheckoutPage() {
                 address: user?.address,
                 city: user?.city,
             });
-            console.log('🚀 ~ handleAddOrder ~ data', data);
         }
     };
 
@@ -165,8 +162,6 @@ function CheckoutPage() {
 
     const addPaypalScript = async () => {
         const { data } = await PaymentService.getConfig();
-
-        console.log('🚀 ~ addPaypalScript ~ data:', data);
 
         const script = document.createElement('script');
         script.type = 'text/javascript';
