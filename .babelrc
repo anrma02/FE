@@ -1,4 +1,5 @@
 {
+    "presets": ["@babel/preset-env", "@babel/preset-react"],
     "plugins": [
         [
             "module-resolver",
@@ -7,6 +8,7 @@
                     "~": "./src"
                 }
             }
-        ]
+        ],
+        "@babel/plugin-proposal-class-properties"
     ]
 }
