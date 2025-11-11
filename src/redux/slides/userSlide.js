@@ -18,17 +18,33 @@ export const userSlide = createSlice({
     initialState,
     reducers: {
         updateUser: (state, action) => {
-            const { _id = '', name = '', email = '', address = '', phone = '', avatar = '', access_token = '', city = '', isAdmin, refreshToken = '' } = action.payload;
-            state.id = _id ? _id : state.id;
-            state.name = name ? name : state.name;
-            state.email = email ? email : state.email;
-            state.address = address ? address : state.address;
-            state.phone = phone ? phone : state.phone;
-            state.avatar = avatar ? avatar : state.avatar;
-            state.access_token = access_token ? access_token : state.access_token;
-            state.city = city ? city : state.city;
-            state.isAdmin = isAdmin ? isAdmin : state.isAdmin;
-            state.refreshToken = refreshToken ? refreshToken : state.refreshToken;
+            // ❌ LỖI CŨ: isAdmin ? isAdmin : state.isAdmin
+            // Nếu isAdmin = false, sẽ lấy state.isAdmin (sai logic)
+            
+            // ✅ SỬA: Kiểm tra undefined thay vì falsy
+            const { 
+                _id, 
+                name, 
+                email, 
+                address, 
+                phone, 
+                avatar, 
+                access_token, 
+                city, 
+                isAdmin, 
+                refreshToken 
+            } = action.payload;
+            
+            if (_id !== undefined) state.id = _id;
+            if (name !== undefined) state.name = name;
+            if (email !== undefined) state.email = email;
+            if (address !== undefined) state.address = address;
+            if (phone !== undefined) state.phone = phone;
+            if (avatar !== undefined) state.avatar = avatar;
+            if (access_token !== undefined) state.access_token = access_token;
+            if (city !== undefined) state.city = city;
+            if (isAdmin !== undefined) state.isAdmin = isAdmin;
+            if (refreshToken !== undefined) state.refreshToken = refreshToken;
         },
         resetUser: (state) => {
             state.id = '';
@@ -45,7 +61,5 @@ export const userSlide = createSlice({
     },
 });
 
-// Action creators are generated for each case reducer function
 export const { updateUser, resetUser } = userSlide.actions;
-
 export default userSlide.reducer;

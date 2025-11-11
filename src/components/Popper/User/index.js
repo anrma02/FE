@@ -40,9 +40,9 @@ function User({ children, items = [] }) {
         setLoading(true);
         await UserService.logOutUser();
         dispatch(resetUser());
-        localStorage.clear();
-        window.location.reload();
+        localStorage.removeItem('access_token'); // Chỉ xóa state của redux-persist
         setLoading(false);
+        navigate('/'); // Điều hướng về trang chủ
     };
     return (
         <div>

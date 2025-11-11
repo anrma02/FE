@@ -277,7 +277,7 @@ function ProductDetail({ idProduct }) {
                                 </div>
                             </div>
                             <div className={cx('custom-container')} onClick={handleClickOpen}>
-                                <Button1 sx={{ fontSize: '12px', color: '#fff', fontWeight: 'bold' }}>Xem truyện</Button1>
+                                <Button1 sx={{ fontSize: '12px', color: '#fff', fontWeight: 'bold' }}>Xem sách</Button1>
                             </div>
                         </div>
                     </div>

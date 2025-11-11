@@ -2,14 +2,14 @@ import classNames from 'classnames/bind';
 import style from './AdminOrder.module.scss';
 import TableComponent from '../ComponentAdmin/TableComponent';
 import {
-    //  useEffect,
+     useEffect,
     useState,
 } from 'react';
 import { Button as BTN, Input, Space } from 'antd';
 
 import * as OrderService from '~/service/OrderSevice';
 
-// import * as messages from '~/components/Message';
+import * as messages from '~/components/Message';
 import { useQuery } from 'react-query';
 import {
     AiOutlineDelete,
@@ -21,14 +21,14 @@ import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { orderContant } from '~/contant';
 import ModalComponent from '../ComponentAdmin/ModalComponent';
-// import { useMutationHooks } from '~/hooks/useMutationHook';
-// import Loading from '~/components/LoadingComponent';
+import { useMutationHooks } from '~/hooks/useMutationHook';
+import Loading from '~/components/LoadingComponent';
 
 const cx = classNames.bind(style);
 function AdminOrder() {
     // const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
-    // const [rowSelected, setRowSelected] = useState('');
+    const [rowSelected, setRowSelected] = useState('');
     const user = useSelector((state) => state?.user);
     //Get All Product
     const getAllOrders = async () => {
@@ -50,33 +50,33 @@ function AdminOrder() {
     const handleCancelDelete = () => {
         setIsModalOpenDelete(false);
     };
-    // const mutationDelete = useMutationHooks((data) => {
-    //     const { id, token } = data;
-    //     const res = OrderService.deleteOrder(id, token);
-    //     return res;
-    // });
-    // const { data: dataDeleted, isLoading: isLoadingDeleted, isSuccess: isSuccessDeleted, isErrorDeleted } = mutationDelete;
+    const mutationDelete = useMutationHooks((data) => {
+        const { id, token } = data;
+        const res = OrderService.deleteOrder(id, token);
+        return res;
+    });
+    const { data: dataDeleted, isLoading: isLoadingDeleted, isSuccess: isSuccessDeleted, isErrorDeleted } = mutationDelete;
 
-    // useEffect(() => {
-    //     if (isSuccessDeleted && dataDeleted?.status === 'OK') {
-    //         messages.success('thêm thành công');
-    //         handleCancelDelete();
-    //     } else if (isErrorDeleted && dataDeleted?.status === 'ERR') {
-    //         messages.error('thêm thất bại');
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [isSuccessDeleted, isErrorDeleted]);
+    useEffect(() => {
+        if (isSuccessDeleted && dataDeleted?.status === 'OK') {
+            messages.success('Xóa thành công');
+            handleCancelDelete();
+        } else if (isErrorDeleted && dataDeleted?.status === 'ERR') {
+            messages.error('Xóa thất bại');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSuccessDeleted, isErrorDeleted]);
 
-    // const handleDeleteUser = () => {
-    //     mutationDelete.mutate(
-    //         { id: rowSelected, token: user?.access_token },
-    //         {
-    //             onSettled: () => {
-    //                 queryOrder.refetch();
-    //             },
-    //         },
-    //     );
-    // };
+    const handleDeleteUser = () => {
+        mutationDelete.mutate(
+            { id: rowSelected, token: user?.access_token },
+            {
+                onSettled: () => {
+                    queryOrder.refetch();
+                },
+            },
+        );
+    };
     //Search
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -184,6 +184,14 @@ function AdminOrder() {
             ),
     });
     //columns data
+
+    const rendervalue = (value) => {
+        if (value === true) {
+            return 'Đã thanh toán';
+        }
+        return 'Chưa thanh toán';
+    }
+
     const columns = [
         {
             title: 'userName',
@@ -247,7 +255,7 @@ function AdminOrder() {
         {
             title: 'Đã thanh toán',
             dataIndex: 'isPaid',
-            render: (isPaid) => `${isPaid}`,
+            render: (isPaid) => `${rendervalue(isPaid)}`,
             width: 200,
             filters: [
                 {
@@ -267,30 +275,30 @@ function AdminOrder() {
                 }
             },
         },
-        {
-            title: 'Đã giao',
-            dataIndex: 'isDelivered',
-            render: (isDelivered) => `${isDelivered}`,
+        // {
+        //     title: 'Đã giao',
+        //     dataIndex: 'isDelivered',
+        //     render: (isDelivered) => `${isDelivered}`,
 
-            width: 200,
-            filters: [
-                {
-                    text: 'true',
-                    value: true,
-                },
-                {
-                    text: 'false',
-                    value: false,
-                },
-            ],
-            onFilter: (value, record) => {
-                if (value === true) {
-                    return record.isDelivered === true;
-                } else if (value === false) {
-                    return record.isDelivered === false;
-                }
-            },
-        },
+        //     width: 200,
+        //     filters: [
+        //         {
+        //             text: 'true',
+        //             value: true,
+        //         },
+        //         {
+        //             text: 'false',
+        //             value: false,
+        //         },
+        //     ],
+        //     onFilter: (value, record) => {
+        //         if (value === true) {
+        //             return record.isDelivered === true;
+        //         } else if (value === false) {
+        //             return record.isDelivered === false;
+        //         }
+        //     },
+        // },
         {
             title: 'Action',
             dataIndex: 'action',
@@ -331,21 +339,21 @@ function AdminOrder() {
                         y: 400,
                     }}
                     isLoading={isLoadingOrder}
-                    // onRow={(record, rowIndex) => {
-                    //     return {
-                    //         onClick: (event) => {
-                    //             setRowSelected(record?._id);
-                    //         },
-                    //     };
-                    // }}
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: (event) => {
+                                setRowSelected(record?._id);
+                            },
+                        };
+                    }}
                 />
             </div>
             {/* <Loading isLoading={isLoadingDeleted}> */}
             <ModalComponent
-                title="Xóa sản phẩm"
+                title="Xóa sản phẩmaaaaaaa"
                 open={isModalOpenDelete}
                 onCancel={handleCancelDelete}
-                //  onOk={handleDeleteUser}
+                 onOk={handleDeleteUser}
             >
                 <div>Bạn có chắc muốn xóa sản phẩm này không</div>
             </ModalComponent>

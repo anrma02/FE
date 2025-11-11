@@ -20,8 +20,6 @@ function MyOrder() {
     const fetchMyOrder = async () => {
         const res = await OrderService.getDetailOrderUser(state?.id, state?.token);
 
-        console.log('🚀 ~ fetchMyOrder ~ res:', res);
-
         return res.data;
     };
     const queryOrder = useQuery(
@@ -46,16 +44,17 @@ function MyOrder() {
         return res;
     });
 
-    const handleCancelOrder = (order) => {
-        mutation.mutate(
-            { id: order._id, token: state?.token, orderItems: order?.orderItems, userId: user.id },
-            {
-                onSuccess: () => {
-                    queryOrder.refetch();
-                },
-            },
-        );
-    };
+const handleCancelOrder = (order) => {
+    mutation.mutate(
+        {
+            id: order._id,
+            token: state.token,
+            orderItems: order.orderItems, // toàn bộ hoặc lọc item cần hủy
+        },
+        { onSuccess: () => queryOrder.refetch() },
+    );
+};
+
     const { data: dataCancelOrder, isSuccess: isSuccessCancel, isError: isErrorCancel, isLoading: isLoadingCancel } = mutation;
 
     const renderProduct = (list) => {

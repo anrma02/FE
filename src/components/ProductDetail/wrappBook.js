@@ -7,9 +7,9 @@ import './style.css';
 
 const WrapperBook = ({ open, handleClose, data }) => {
     const chapters = data?.description || [];
-
+  
     const parsedData = JSON.parse(chapters);
-
+ 
     return (
         <div open={open} onClose={handleClose}>
             <Dialog open={open} maxWidth="lg">

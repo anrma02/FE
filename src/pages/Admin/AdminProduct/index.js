@@ -37,7 +37,7 @@ function AdminProduct() {
         discount: '',
     });
     const [stateProduct, setStateProduct] = useState(initial());
-    const [page, setPage] = useState(1);
+     const [page, setPage] = useState(1);
     const [limit] = useState(10);
 
     //thêm dữ liệu vào Product bằng react query
@@ -510,14 +510,14 @@ function AdminProduct() {
                     <form method="post" action="">
                         <div className={cx('form-group')}>
                             <label htmlFor="name" className={cx('form-label')}>
-                                Tên truyện
+                                Tên sách
                             </label>
                             <div className={cx('form-input')}>
                                 <input
                                     value={stateProduct.name}
                                     onChange={handleOnChange}
                                     type="text"
-                                    placeholder="Nhập tên truyện"
+                                    placeholder="Nhập tên sách"
                                     className={cx('form-control')}
                                     id="name"
                                     name="name"
@@ -684,7 +684,7 @@ function AdminProduct() {
                     <form method="post" action="">
                         <div className={cx('form-group')}>
                             <label htmlFor="name" className={cx('form-label')}>
-                                Tên truyện
+                                Tên sách
                             </label>
                             <div className={cx('form-input')}>
                                 <input
@@ -835,8 +835,8 @@ function AdminProduct() {
                             </label>
                             <div className={cx('form-input1')}>
                                 <textarea
-                                    value={stateProduct.content}
-                                    onChange={handleOnChange}
+                                    value={stateProductDetail.content}
+                                    onChange={handleOnChangeDetail}
                                     name="content"
                                     type="text"
                                     placeholder="Nhập nội dung"
@@ -855,7 +855,7 @@ function AdminProduct() {
                         </div>
                     </form>
                     <Button login className={cx('btn-save')} onClick={handleOnUpdate}>
-                        Update
+                        Updates
                     </Button>
                 </Loading>
             </DrawerComponent>

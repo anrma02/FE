@@ -46,12 +46,12 @@ function Login() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSuccess, isError]);
-    const handleGetDetailUser = async (id, token) => {
-        const storage = localStorage.getItem('refresh_token');
-        const refreshToken = JSON.parse(storage);
-        const res = await UserService.getDetailUser(id, token);
-        dispatch(updateUser({ ...res?.data, access_token: token, refreshToken }));
-    };
+    // const handleGetDetailUser = async (id, token) => {
+    //     const storage = localStorage.getItem('refresh_token');
+    //     const refreshToken = JSON.parse(storage);
+    //     const res = await UserService.getDetailUser(id, token);
+    //     dispatch(updateUser({ ...res?.data, access_token: token, refreshToken }));
+    // };
     // useEffect(() => {
     //     if (isSuccess) {
     //         navigate('/');
@@ -71,6 +71,38 @@ function Login() {
     //     const res = await UserService.getDetailUser(id, token);
     //     dispatch(updateUser({ ...res?.data, access_token: token }));
     // };
+
+    useEffect(() => {
+        if (isSuccess && data?.status !== 'ERR') {
+            // ✅ SỬA: Lưu token TRƯỚC KHI navigate
+            if (data?.access_token && data?.refresh_token) {
+                localStorage.setItem('access_token', JSON.stringify(data.access_token));
+                localStorage.setItem('refresh_token', JSON.stringify(data.refresh_token));
+                
+                try {
+                    const decoded = jwt_decode(data.access_token);
+                    
+                    if (decoded?.id) {
+                        handleGetDetailUser(decoded.id, data.access_token)
+                            .then(() => {
+                                // Navigate SAU KHI đã lưu token và lấy user details
+                                if (location?.state) {
+                                    navigate(location.state);
+                                } else {
+                                    navigate('/');
+                                }
+                            })
+                            .catch((error) => {
+                                console.error('Error getting user details:', error);
+                            });
+                    }
+                } catch (error) {
+                    console.error('Error decoding token:', error);
+                }
+            }
+        }
+    }, [isSuccess, data]);
+
     //lấy dữ liệu từ form login
     const handleOnchangeEmail = (value) => {
         setEmail(value);
@@ -84,6 +116,25 @@ function Login() {
             password,
         });
     };
+        const handleGetDetailUser = async (id, token) => {
+        try {
+            const storage = localStorage.getItem('refresh_token');
+            const refreshToken = JSON.parse(storage);
+            const res = await UserService.getDetailUser(id, token);
+            
+            if (res?.data) {
+                dispatch(updateUser({ 
+                    ...res.data, 
+                    access_token: token, 
+                    refreshToken 
+                }));
+            }
+        } catch (error) {
+            console.error('Error in handleGetDetailUser:', error);
+            throw error;
+        }
+    };
+
 
     const handleNavigateForgot = () => {
         navigate('/forgotpass');

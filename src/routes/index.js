@@ -29,9 +29,9 @@ const publishRoutes = [
     { path: '/ordersuccess', component: OrderSuccess },
     { path: '/my_order', component: MyOrder },
     { path: '/detail_Order/:id', component: DetailOrder },
-
+    { path: '/system/admin', component: Admin, layout: null },
     { path: '*', component: NotFoundPage, layout: null },
 ];
-const privateRoutes = [{ path: '/system/admin', component: Admin, layout: null, isPrivate: true }];
+// const privateRoutes = [{ path: '/system/admin', component: Admin, layout: null, isPrivate: true }];
 
-export { publishRoutes, privateRoutes };
+export { publishRoutes };

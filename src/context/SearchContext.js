@@ -16,7 +16,7 @@ const SearchProvider = ({ children }) => {
 
         const fetchStories = async () => {
             try {
-                const response = await axios.get(`http://localhost:3003/api/story/stories?search=${debounced}`);
+                const response = await axios.get(`http://localhost:5000/api/story/stories?search=${debounced}`);
                 setSearchResult(response.data.stories);
             } catch (error) {
                 console.error('Error fetching stories', error);
